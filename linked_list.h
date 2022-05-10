@@ -17,6 +17,8 @@ void insert_node(Node **list_head_ptr, Node *newNodePtr);
 
 void create_node(Node **list_head_ptr, string student_name, int student_ID, float grades[12]);
 
-void read_file(Node **list_head_ptr, string filename);
+int read_file(Node **list_head_ptr, string filename);
 
 void print_list(Node **list_head);
+
+void create_manual(Node **list_head_ptr);
