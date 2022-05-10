@@ -6,8 +6,7 @@
 using namespace std;
 
 struct Data {
-    string first_name;
-    string last_name;
+    string name;
     float grades[12];
     int ID;
 };
@@ -22,10 +21,9 @@ void insert_node(Node **list_head_ptr, Node *newNodePtr) {
     *list_head_ptr = newNodePtr;
 }
 
-void createNode(Node **list_head_ptr, string first_name, string last_name, int student_ID, float grades[12]) {
+void create_node(Node **list_head_ptr, string student_name, int student_ID, float grades[12]) {
     Node *newNodePtr = (Node*) malloc(sizeof(Node));
-    newNodePtr->student.first_name = first_name;
-    newNodePtr->student.last_name = last_name;
+    newNodePtr->student.name = student_name;
     newNodePtr->student.ID = student_ID;
     for(int i = 0; i < 12; i++)
         newNodePtr->student.grades[i] = grades[i];
@@ -34,29 +32,36 @@ void createNode(Node **list_head_ptr, string first_name, string last_name, int s
 }
 
 void read_file(Node **list_head_ptr, string filename){
-    string line, first_name, last_name;
-    int student_ID;
+    string line, student_name;
+    int student_ID = 0;
     float grades[12];
+    for(int i = 0; i < 12; i++)
+        grades[i] = 0;
     ifstream records;
     records.open(filename, ios::in);
-    for(int i = 0; i < 4; i++) {
-        records >> line; //eat categories
+    getline(records, line); // consume header
+    
+    while(!records.eof()) {
+        
+        getline(records, student_name);
+        getline(records, line);
+        student_ID = stoi(line);
+        
+        for(int i = 0; i < 12; i++) {
+            records >> line;
+            grades[i] = stof(line);
+        }
+        getline(records, line); //consume whitespace ?
+        
+        create_node(list_head_ptr, student_name, student_ID, grades);
     }
-    //while(!records.eof()) {
-        records >> first_name;
-        records >> last_name;
-        records >> student_ID;
-        for(int i = 0; i < 12; i++)
-            records >> grades[i];
-        createNode(list_head_ptr, first_name, last_name, student_ID, grades[12]);
-    //}
     records.close();
 }
 
 void print_list(Node **list_head) {
     Node *traversePtr = *list_head;
     while(traversePtr != NULL) {
-        cout << traversePtr->student.first_name;
+        cout << traversePtr->student.name << "\n";
         traversePtr = traversePtr->next;
     }
 }
