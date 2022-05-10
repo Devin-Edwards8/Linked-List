@@ -1,12 +1,10 @@
 #include "linked_list.h"
 #include <fstream>
 
-void read_file(Node **list_head_ptr, string filename) {
+int read_file(Node **list_head_ptr, string filename) {
     string line, student_name;
-    int student_ID = 0;
+    int student_ID, count = 0;
     float grades[12];
-    for(int i = 0; i < 12; i++)
-        grades[i] = 0;
     ifstream records;
     records.open(filename, ios::in);
     getline(records, line); // consume header
@@ -24,6 +22,11 @@ void read_file(Node **list_head_ptr, string filename) {
         getline(records, line); //consume whitespace ?
         
         create_node(list_head_ptr, student_name, student_ID, grades);
+
+        count++;
     }
+
     records.close();
+
+    return count;
 }
